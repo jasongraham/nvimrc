@@ -34,10 +34,18 @@ endif
 " Syntastic for stuff that doesn't currently have LanguageClient options
 Plug 'vim-syntastic/syntastic'
 
+" Completion Manager
 if !is_nvim
     Plug 'roxma/vim-hug-neovim-rpc'
 endif
-Plug 'roxma/nvim-completion-manager'
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+
+" Completion Manager Plugins
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-syntax' | Plug 'Shougo/neco-syntax'
+Plug 'ncm2/ncm2-neoinclude' | Plug 'Shougo/neoinclude.vim'
 
 " Airline plugs and extensions
 Plug 'vim-airline/vim-airline'
@@ -112,13 +120,12 @@ set tabstop=4
 set shiftwidth=4
 
 " Completion manager config
+autocmd BufEnter * call ncm2#enable_for_buffer()
+set completeopt=noinsert,menuone,noselect,preview
 set shortmess+=c
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-function! s:my_cr_function()
-    return pumvisible() ? "\<c-y>\<cr>" : "\<CR>"
-endfunction
+inoremap <expr> <CR> (pumvisible() ? "\<C-y>\<cr>" : "\<CR>")
 let g:cm_matcher = {'case': 'smartcase', 'module': 'cm_matchers.fuzzy_matcher'}
 
 " Airline config
